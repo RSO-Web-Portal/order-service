@@ -30,7 +30,8 @@ public class Database {
                     new Order("1", new String[] {"1"}, new int[] {1}, "1", "1"),
                     new Order("2", new String[] {"1"}, new int[] {3}, "1", "2"),
                     new Order("3", new String[] {"2"}, new int[] {2}, "2", "4"),
-                    new Order("4", new String[] {"2", "2"}, new int[] {2,123}, "2", "4")
+                    new Order("4", new String[] {"2", "3"}, new int[] {1,1}, "3", "4"),
+                    new Order("5", new String[] {"4", "5"}, new int[] {1,1}, "4", "3")
             )
     );
 
