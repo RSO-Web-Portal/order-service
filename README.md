@@ -1,2 +1,2 @@
 # order-service
-Combines item, category, discount to create an order which can be displayed on the catalogue
+Combines item, order, discount to create an order which can be displayed on the catalogue
