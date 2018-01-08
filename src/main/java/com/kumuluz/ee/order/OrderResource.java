@@ -23,15 +23,18 @@ package com.kumuluz.ee.order;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.kumuluz.ee.discovery.annotations.DiscoverService;
 import com.kumuluz.ee.logs.cdi.Log;
 import com.kumuluz.ee.logs.cdi.LogParams;
@@ -49,6 +52,10 @@ public class OrderResource {
     @Inject
     @DiscoverService(value = "item-service", version = "1.0.x", environment = "dev")
     private Optional<WebTarget> target;
+
+    @Inject
+    @DiscoverService(value = "catalogue-service", version = "1.0.x", environment = "dev")
+    private Optional<WebTarget> catalogueTarget;
 
 
 
@@ -89,17 +96,21 @@ public class OrderResource {
 
 
         Response response;
-        Item[] items = new Item[order.getItemIds().length];
+        List<Item> items = new ArrayList<Item>();
+
         try {
 
             for (int i = 0; i < order.getItemIds().length; i++) {
                 itemService = target.get().path("v1/items/" + order.getItemIds()[i]);
                 response = itemService.request().get();
                 Item it = (response.readEntity(Item.class));
-                items[i] = it;
+                items.add(it);
             }
 
-            return Response.ok(items).build();
+
+            //TODO: returning more than 1 element needs work.......
+
+            return Response.status(200).entity(items.toArray()).build();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -119,6 +130,37 @@ public class OrderResource {
     public Response addOrder(Order order) {
         Database.addOrder(order);
         return Response.ok().build();
+    }
+
+    @PUT
+    @Path("{id}/publish")
+    public Response publishOrder(@PathParam("id") String id, Product product) {
+        product.setOrderId(id);
+        product.setActive(true);
+
+        if (!catalogueTarget.isPresent()) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        WebTarget catalogueService;
+
+        Response response;
+        try {
+
+
+            catalogueService = catalogueTarget.get().path("v1/products/");
+            response = catalogueService.request(MediaType.APPLICATION_JSON).post(Entity.json(product));
+
+            System.out.println("STATUS: " + response.getStatus());
+
+
+            return response.ok().build();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(408).build();
+        }
+
     }
 
     @DELETE

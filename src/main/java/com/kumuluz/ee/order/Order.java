@@ -20,16 +20,13 @@
 */
 package com.kumuluz.ee.order;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class Order {
 
 
     private String id;
+    private String description;
     private String[] itemIds;
-    private int[] quanitites;
+    private int[] quantities;
     private String categoryId;
     private String discountId;
 
@@ -37,10 +34,11 @@ public class Order {
     }
 
 
-    public Order(String id, String[] itemIds, int[] quanitites, String categoryId, String discountId) {
+    public Order(String id, String description, String[] itemIds, int[] quantities, String categoryId, String discountId) {
         this.id = id;
+        this.description = description;
         this.itemIds = itemIds;
-        this.quanitites = quanitites;
+        this.quantities = quantities;
         this.categoryId = categoryId;
         this.discountId = discountId;
     }
@@ -61,12 +59,12 @@ public class Order {
         this.itemIds = itemIds;
     }
 
-    public int[] getQuanitites() {
-        return quanitites;
+    public int[] getQuantities() {
+        return quantities;
     }
 
-    public void setQuanitites(int[] quanitites) {
-        this.quanitites = quanitites;
+    public void setQuantities(int[] quantities) {
+        this.quantities = quantities;
     }
 
     public String getCategoryId() {
@@ -84,4 +82,8 @@ public class Order {
     public void setDiscountId(String discountId) {
         this.discountId = discountId;
     }
+
+    public String getDescription() { return description;  }
+
+    public void setDescription(String description) { this.description = description; }
 }

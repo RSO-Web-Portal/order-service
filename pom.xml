@@ -156,6 +156,7 @@
             <artifactId>kumuluzee-fault-tolerance-hystrix</artifactId>
         </dependency>
 
+
     </dependencies>
 
 
