@@ -108,7 +108,7 @@ public class OrderResource {
             }
 
 
-            //TODO: returning more than 1 element needs work.......
+            
 
             return Response.status(200).entity(items.toArray()).build();
 
